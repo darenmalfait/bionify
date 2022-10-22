@@ -1,6 +1,12 @@
 {
   "name": "bionify",
-  "version": "1.0.0-alpha.0",
+  "version": "0.0.0-semantically-released",
+  "description": "Bionify is a library for bionic reading. It changes html blocs into a bionic reading experience.",
+  "keywords": [
+    "bionify",
+    "bionic reading",
+    "javascript"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:darenmalfait/bionify.git"
