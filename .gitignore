@@ -1,0 +1,26 @@
+# Dependency directories
+node_modules/
+
+# dist
+dist
+build
+
+# Optional npm cache directory
+.npm
+
+# Mac files
+.DS_Store
+
+# misc
+.history
+yarn.lock
+tsconfig.tsbuildinfo
+
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
