@@ -1,4 +1,6 @@
-import { bionify, BionifyOptions } from '../bionify'
+import { unescape } from 'lodash'
+
+import { bionifyHTML, bionifyNode, BionifyOptions } from '../bionify'
 
 type TestCase = {
   input: string
@@ -48,13 +50,31 @@ for (const [
   title,
   { input, options, output, only = false, skip = false },
 ] of Object.entries<TestCase>(tests)) {
-  const testFn = () => expect(bionify(input, options)).toEqual(output)
+  const testHtml = () => expect(bionifyHTML(input, options)).toEqual(output)
+
+  document.body.innerHTML = `
+    <div id="root">
+      ${input}
+    </div>
+  `
+
+  const root = document.getElementById('root') as HTMLDivElement
+
+  bionifyNode(root, options)
+
+  const testNode = () => expect(unescape(root.innerHTML).trim()).toEqual(output)
+
+  const htmlTitle = `bionifyHTML: ${title}`
+  const nodeTitle = `bionifyNode: ${title}`
 
   if (only) {
-    test.only(title, testFn)
+    test.only(htmlTitle, testHtml)
+    test.only(nodeTitle, testNode)
   } else if (skip) {
-    test.skip(title, testFn)
+    test.skip(htmlTitle, testHtml)
+    test.skip(nodeTitle, testNode)
   } else {
-    test(title, testFn)
+    test(htmlTitle, testHtml)
+    test(nodeTitle, testNode)
   }
 }

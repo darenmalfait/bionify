@@ -100,7 +100,10 @@ function getHighlightedText(text: string, seperator: string | string[]) {
   return `${seperator[0]}${text}${seperator[1]}`
 }
 
-function bionify(textToBionify: string, options: BionifyOptions = {}): string {
+function bionifyHTML(
+  textToBionify: string,
+  options: BionifyOptions = {},
+): string {
   const { seperator, elementsToSkip }: BionifyOptions = {
     ...defaultOptions,
     ...options,
@@ -152,5 +155,37 @@ function bionify(textToBionify: string, options: BionifyOptions = {}): string {
   return result + remainText
 }
 
-export { bionify }
+function bionifyNode(
+  node: HTMLDivElement | null,
+  options: BionifyOptions = {},
+) {
+  if (!node) return
+
+  const { seperator, elementsToSkip }: BionifyOptions = {
+    ...defaultOptions,
+    ...options,
+  }
+
+  // loop through all child nodes, ignore script, noscript and style
+  for (let i = 0; i < node.childNodes.length; i++) {
+    const childNode = node.childNodes[i]
+
+    if (childNode.nodeType === Node.TEXT_NODE) {
+      const text = childNode.textContent ?? ''
+      const bionifiedText = bionifyHTML(text, { seperator, elementsToSkip })
+      childNode.textContent = bionifiedText
+    } else if (childNode.nodeType === Node.ELEMENT_NODE) {
+      const element = childNode as HTMLDivElement
+      const tagName = element.tagName.toUpperCase()
+
+      if (elementsToSkip.includes(tagName)) {
+        continue
+      }
+
+      bionifyNode(element, { seperator, elementsToSkip })
+    }
+  }
+}
+
+export { bionifyHTML, bionifyNode }
 export type { BionifyOptions }
