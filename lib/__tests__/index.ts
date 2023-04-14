@@ -1,6 +1,6 @@
-import { unescape } from 'lodash'
+import {unescape} from 'lodash'
 
-import { bionifyHTML, bionifyNode, BionifyOptions } from '../bionify'
+import {BionifyOptions, bionifyHTML, bionifyNode} from '../bionify'
 
 type TestCase = {
   input: string
@@ -48,8 +48,9 @@ const tests: Record<string, TestCase> = {
 
 for (const [
   title,
-  { input, options, output, only = false, skip = false },
+  {input, options, output, only = false, skip = false},
 ] of Object.entries<TestCase>(tests)) {
+  // eslint-disable-next-line @typescript-eslint/no-loop-func
   const testHtml = () => expect(bionifyHTML(input, options)).toEqual(output)
 
   document.body.innerHTML = `
@@ -62,6 +63,7 @@ for (const [
 
   bionifyNode(root, options)
 
+  // eslint-disable-next-line @typescript-eslint/no-loop-func
   const testNode = () => expect(unescape(root.innerHTML).trim()).toEqual(output)
 
   const htmlTitle = `bionifyHTML: ${title}`

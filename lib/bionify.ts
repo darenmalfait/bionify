@@ -47,7 +47,7 @@ function isHtmlTag(text: string) {
   const reversedHtmlTagRangeList = htmlTagRangeList.reverse()
 
   return (match: RegExpMatchArray) => {
-    const startIndex = match.index!
+    const startIndex = match.index ?? 0
     const tagRange = reversedHtmlTagRangeList.find(
       ([rangeStart]) => startIndex > rangeStart,
     )
@@ -66,16 +66,16 @@ function getHtmlTagRangeList(
   htmlTagMatchList: IterableIterator<RegExpMatchArray>,
 ) {
   return [...htmlTagMatchList].map(htmlTagMatch => {
-    const startIndex = htmlTagMatch.index!
+    const startIndex = htmlTagMatch.index ?? 0
     const [tag] = htmlTagMatch
-    const { length: tagLength } = tag
+    const {length: tagLength} = tag
 
     return [startIndex, startIndex + tagLength - 1]
   })
 }
 
 function getFixationLength(word: string) {
-  const { length: wordLength } = word
+  const {length: wordLength} = word
   const fixationBoundary =
     FIXATION_BOUNDARY_LIST[0] ?? FIXATION_BOUNDARY_LIST[0]
 
@@ -104,7 +104,7 @@ function bionifyHTML(
   textToBionify: string,
   options: BionifyOptions = {},
 ): string {
-  const { separator, elementsToSkip }: BionifyOptions = {
+  const {separator, elementsToSkip}: BionifyOptions = {
     ...defaultOptions,
     ...options,
   }
@@ -117,9 +117,9 @@ function bionifyHTML(
 
   let skipping: string | undefined
   for (const match of convertibleMatchList) {
-    const isHtmlTag = checkIsHtmlTag(match)
+    const isHtml = checkIsHtmlTag(match)
 
-    if (isHtmlTag) {
+    if (isHtml) {
       if (elementsToSkip.includes(match[0].toUpperCase())) {
         if (skipping) {
           skipping = undefined
@@ -132,7 +132,7 @@ function bionifyHTML(
     }
 
     const [matchedWord] = match
-    const startIndex = match.index!
+    const startIndex = match.index ?? 0
     const endIndex = startIndex + getFixationLength(matchedWord)
     if (!skipping) {
       const plainText = textToBionify.slice(lastMatchedIndex, startIndex)
@@ -161,7 +161,7 @@ function bionifyNode(
 ) {
   if (!node) return
 
-  const { separator, elementsToSkip }: BionifyOptions = {
+  const {separator, elementsToSkip}: BionifyOptions = {
     ...defaultOptions,
     ...options,
   }
@@ -172,7 +172,7 @@ function bionifyNode(
 
     if (childNode.nodeType === Node.TEXT_NODE) {
       const text = childNode.textContent ?? ''
-      const bionifiedText = bionifyHTML(text, { separator, elementsToSkip })
+      const bionifiedText = bionifyHTML(text, {separator, elementsToSkip})
       childNode.textContent = bionifiedText
     } else if (childNode.nodeType === Node.ELEMENT_NODE) {
       const element = childNode as HTMLDivElement
@@ -182,10 +182,10 @@ function bionifyNode(
         continue
       }
 
-      bionifyNode(element, { separator, elementsToSkip })
+      bionifyNode(element, {separator, elementsToSkip})
     }
   }
 }
 
-export { bionifyHTML, bionifyNode }
-export type { BionifyOptions }
+export {bionifyHTML, bionifyNode}
+export type {BionifyOptions}
