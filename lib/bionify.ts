@@ -32,12 +32,12 @@ const FIXATION_BOUNDARY_LIST = [
 ]
 
 type BionifyOptions = {
-  seperator?: string[]
+  separator?: string[]
   elementsToSkip?: string[]
 }
 
 const defaultOptions = {
-  seperator: ['<b>', '</b>'],
+  separator: ['<b>', '</b>'],
   elementsToSkip: ELEMENTS_TO_SKIP,
 }
 
@@ -92,19 +92,19 @@ function getFixationLength(word: string) {
   return Math.max(fixationLength, 0)
 }
 
-function getHighlightedText(text: string, seperator: string | string[]) {
-  if (typeof seperator === 'string') {
-    return `${seperator}${text}${seperator}`
+function getHighlightedText(text: string, separator: string | string[]) {
+  if (typeof separator === 'string') {
+    return `${separator}${text}${separator}`
   }
 
-  return `${seperator[0]}${text}${seperator[1]}`
+  return `${separator[0]}${text}${separator[1]}`
 }
 
 function bionifyHTML(
   textToBionify: string,
   options: BionifyOptions = {},
 ): string {
-  const { seperator, elementsToSkip }: BionifyOptions = {
+  const { separator, elementsToSkip }: BionifyOptions = {
     ...defaultOptions,
     ...options,
   }
@@ -141,7 +141,7 @@ function bionifyHTML(
       if (startIndex !== endIndex) {
         result += getHighlightedText(
           textToBionify.slice(startIndex, endIndex),
-          seperator,
+          separator,
         )
       }
     } else {
@@ -161,7 +161,7 @@ function bionifyNode(
 ) {
   if (!node) return
 
-  const { seperator, elementsToSkip }: BionifyOptions = {
+  const { separator, elementsToSkip }: BionifyOptions = {
     ...defaultOptions,
     ...options,
   }
@@ -172,7 +172,7 @@ function bionifyNode(
 
     if (childNode.nodeType === Node.TEXT_NODE) {
       const text = childNode.textContent ?? ''
-      const bionifiedText = bionifyHTML(text, { seperator, elementsToSkip })
+      const bionifiedText = bionifyHTML(text, { separator, elementsToSkip })
       childNode.textContent = bionifiedText
     } else if (childNode.nodeType === Node.ELEMENT_NODE) {
       const element = childNode as HTMLDivElement
@@ -182,7 +182,7 @@ function bionifyNode(
         continue
       }
 
-      bionifyNode(element, { seperator, elementsToSkip })
+      bionifyNode(element, { separator, elementsToSkip })
     }
   }
 }

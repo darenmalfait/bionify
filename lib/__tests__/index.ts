@@ -15,13 +15,13 @@ const tests: Record<string, TestCase> = {
     input: 'Hello World',
     output: '<b>Hel</b>lo <b>Wor</b>ld',
   },
-  'Return bionified hello world with custom seperator': {
+  'Return bionified hello world with custom separator': {
     input: 'Hello World',
     options: {
-      seperator: ['<div class="bionify-seperator">', '</div>'],
+      separator: ['<div class="bionify-separator">', '</div>'],
     },
     output:
-      '<div class="bionify-seperator">Hel</div>lo <div class="bionify-seperator">Wor</div>ld',
+      '<div class="bionify-separator">Hel</div>lo <div class="bionify-separator">Wor</div>ld',
   },
   'Returns bionified paragraph': {
     input:
