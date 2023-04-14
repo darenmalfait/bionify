@@ -10,7 +10,6 @@
     "strict": true,
     "isolatedModules": true,
     "noFallthroughCasesInSwitch": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noImplicitAny": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
